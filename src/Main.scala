@@ -157,4 +157,50 @@ object Main {
     case EMail(user, domain) => println(user + " AT " + domain)
     case _ => println("not email address")
   }
+
+  class Rectangle{
+    var width: Double = 0
+    var height: Double = 0
+    def setWidth(width: Double): Unit ={
+      this.width = width
+    }
+    def setHeight(height: Double): Unit ={
+      this.height = height
+    }
+    def getWidth(): Double ={
+      width
+    }
+    def getHeight(): Double ={
+      height
+    }
+    def getArea(): Double ={
+      width * height
+    }
+    def isCheck(rectangle: Rectangle): Boolean ={
+      rectangle.getArea() == 20
+    }
+  }
+
+  class Square extends Rectangle{
+
+    @Override
+    override def setWidth(width: Double): Unit ={
+      this.width = width
+      this.height = width
+    }
+
+    @Override
+    override def setHeight(height: Double): Unit = {
+      this.height = height
+      this.width = height
+    }
+  }
+  val rec = new Square
+  rec.setWidth(4)
+  rec.setHeight(5)
+  if (!rec.isCheck(rec)){
+    throw new RuntimeException
+  }
+
+
 }
