@@ -161,46 +161,37 @@ object Main {
   class Rectangle{
     var width: Double = 0
     var height: Double = 0
-    def setWidth(width: Double): Unit ={
-      this.width = width
-    }
-    def setHeight(height: Double): Unit ={
-      this.height = height
-    }
-    def getWidth(): Double ={
-      width
-    }
-    def getHeight(): Double ={
-      height
-    }
-    def getArea(): Double ={
-      width * height
-    }
-    def isCheck(rectangle: Rectangle): Boolean ={
-      rectangle.getArea() == 20
-    }
+    def setWidth(width: Double)= this.width = width
+    def setHeight(height: Double)= this.height = height
+    def getWidth(): Double = width
+    def getHeight(): Double = height
+    def getArea(): Double = width * height
   }
 
   class Square extends Rectangle{
 
     @Override
-    override def setWidth(width: Double): Unit ={
+    override def setWidth(width: Double)={
       this.width = width
       this.height = width
     }
 
     @Override
-    override def setHeight(height: Double): Unit = {
+    override def setHeight(height: Double)={
       this.height = height
       this.width = height
     }
   }
-  val rec = new Square
-  rec.setWidth(4)
-  rec.setHeight(5)
-  if (!rec.isCheck(rec)){
-    throw new RuntimeException
+  def increaseHeight(rectangle: Rectangle): Unit = {
+    if(rectangle.getHeight() <= rectangle.getWidth()){
+      rectangle.setHeight(rectangle.getWidth() + 10 )
+    }
   }
-
+  val rec = new Rectangle
+  rec.setWidth(4)
+  rec.setHeight(3)
+  increaseHeight(rec)
+  println(rec.getWidth())
+  println(rec.getHeight())
 
 }
