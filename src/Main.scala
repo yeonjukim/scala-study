@@ -102,46 +102,46 @@ object Main {
   println(stack.pop)  // prints 2
   println(stack.pop)  // prints 1
 
-  abstract class Animal {
-    def name: String
-  }
-  case class Cat(name: String) extends Animal
-  case class Dog(name: String) extends Animal
-  def printAnimalNames(animals: List[Animal]): Unit = {
-    animals.foreach { animal =>
-      println(animal.name)
-    }
-  }
-
-  val cats: List[Cat] = List(Cat("Whiskers"), Cat("Tom"))
-  val dogs: List[Dog] = List(Dog("Fido"), Dog("Rex"))
-
-  printAnimalNames(cats)
-  // Whiskers
-  // Tom
-  printAnimalNames(dogs)
-  // Fido
-  // Rex
-  abstract class Printer[-A] {
-    def print(value: A): Unit
-  }
-  class AnimalPrinter extends Printer[Animal] {
-    def print(animal: Animal): Unit =
-      println("The animal's name is: " + animal.name)
-  }
-  class CatPrinter extends Printer[Cat] {
-    def print(cat: Cat): Unit =
-      println("The cat's name is: " + cat.name)
-  }
-  val myCat: Cat = Cat("Boots")
-  def printMyCat(printer: Printer[Cat]): Unit = {
-    printer.print(myCat)
-  }
-
-  val catPrinter: Printer[Cat] = new CatPrinter
-  val animalPrinter: Printer[Animal] = new AnimalPrinter
-  printMyCat(catPrinter)
-  printMyCat(animalPrinter)
+//  abstract class Animal {
+//    def name: String
+//  }
+//  case class Cat(name: String) extends Animal
+//  case class Dog(name: String) extends Animal
+//  def printAnimalNames(animals: List[Animal]): Unit = {
+//    animals.foreach { animal =>
+//      println(animal.name)
+//    }
+//  }
+//
+//  val cats: List[Cat] = List(Cat("Whiskers"), Cat("Tom"))
+//  val dogs: List[Dog] = List(Dog("Fido"), Dog("Rex"))
+//
+//  printAnimalNames(cats)
+//  // Whiskers
+//  // Tom
+//  printAnimalNames(dogs)
+//  // Fido
+//  // Rex
+//  abstract class Printer[-A] {
+//    def print(value: A): Unit
+//  }
+//  class AnimalPrinter extends Printer[Animal] {
+//    def print(animal: Animal): Unit =
+//      println("The animal's name is: " + animal.name)
+//  }
+//  class CatPrinter extends Printer[Cat] {
+//    def print(cat: Cat): Unit =
+//      println("The cat's name is: " + cat.name)
+//  }
+//  val myCat: Cat = Cat("Boots")
+//  def printMyCat(printer: Printer[Cat]): Unit = {
+//    printer.print(myCat)
+//  }
+//
+//  val catPrinter: Printer[Cat] = new CatPrinter
+//  val animalPrinter: Printer[Animal] = new AnimalPrinter
+//  printMyCat(catPrinter)
+//  printMyCat(animalPrinter)
 
   object EMail {
     // injection (선택적)
@@ -194,4 +194,41 @@ object Main {
   println(rec.getWidth())
   println(rec.getHeight())
 
+  case class ListNode[+T](h: T, t: ListNode[T]) {
+    def head: T = h
+    def tail: ListNode[T] = t
+    def prepend[U >: T](elem: U): ListNode[U] =
+      ListNode(elem, this)
+  }
+  val empty: ListNode[Null] = ListNode(null, null)
+  val strList: ListNode[String] = empty.prepend("hello")
+    .prepend("world")
+  val anyList: ListNode[Any] = strList.prepend(12345)
+  println(anyList)
+
+  trait Abstract {
+    type T
+    def transform(x: T) : T
+    val initial: T
+    var current: T
+  }
+  class Concrete extends Abstract {
+    type T = String
+    def transform(x: String) = x + x
+    val initial = "hi"
+    var current = initial
+  }
+  class Food
+  abstract class Animal {
+    type SuitableFood <: Food
+    def eat(food: SuitableFood)
+  }
+  class Grass extends Food
+  class Cow extends Animal {
+    type SuitableFood = Grass
+    override def eat(food: SuitableFood){ }
+  }
+  class Fish extends Food
+  val bessy: Animal = new Cow
+  bessy eat (new Fish) //error
 }
