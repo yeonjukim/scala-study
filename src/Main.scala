@@ -102,46 +102,46 @@ object Main {
   println(stack.pop)  // prints 2
   println(stack.pop)  // prints 1
 
-  abstract class Animal {
-    def name: String
-  }
-  case class Cat(name: String) extends Animal
-  case class Dog(name: String) extends Animal
-  def printAnimalNames(animals: List[Animal]): Unit = {
-    animals.foreach { animal =>
-      println(animal.name)
-    }
-  }
-
-  val cats: List[Cat] = List(Cat("Whiskers"), Cat("Tom"))
-  val dogs: List[Dog] = List(Dog("Fido"), Dog("Rex"))
-
-  printAnimalNames(cats)
-  // Whiskers
-  // Tom
-  printAnimalNames(dogs)
-  // Fido
-  // Rex
-  abstract class Printer[-A] {
-    def print(value: A): Unit
-  }
-  class AnimalPrinter extends Printer[Animal] {
-    def print(animal: Animal): Unit =
-      println("The animal's name is: " + animal.name)
-  }
-  class CatPrinter extends Printer[Cat] {
-    def print(cat: Cat): Unit =
-      println("The cat's name is: " + cat.name)
-  }
-  val myCat: Cat = Cat("Boots")
-  def printMyCat(printer: Printer[Cat]): Unit = {
-    printer.print(myCat)
-  }
-
-  val catPrinter: Printer[Cat] = new CatPrinter
-  val animalPrinter: Printer[Animal] = new AnimalPrinter
-  printMyCat(catPrinter)
-  printMyCat(animalPrinter)
+//  abstract class Animal {
+//    def name: String
+//  }
+//  case class Cat(name: String) extends Animal
+//  case class Dog(name: String) extends Animal
+//  def printAnimalNames(animals: List[Animal]): Unit = {
+//    animals.foreach { animal =>
+//      println(animal.name)
+//    }
+//  }
+//
+//  val cats: List[Cat] = List(Cat("Whiskers"), Cat("Tom"))
+//  val dogs: List[Dog] = List(Dog("Fido"), Dog("Rex"))
+//
+//  printAnimalNames(cats)
+//  // Whiskers
+//  // Tom
+//  printAnimalNames(dogs)
+//  // Fido
+//  // Rex
+//  abstract class Printer[-A] {
+//    def print(value: A): Unit
+//  }
+//  class AnimalPrinter extends Printer[Animal] {
+//    def print(animal: Animal): Unit =
+//      println("The animal's name is: " + animal.name)
+//  }
+//  class CatPrinter extends Printer[Cat] {
+//    def print(cat: Cat): Unit =
+//      println("The cat's name is: " + cat.name)
+//  }
+//  val myCat: Cat = Cat("Boots")
+//  def printMyCat(printer: Printer[Cat]): Unit = {
+//    printer.print(myCat)
+//  }
+//
+//  val catPrinter: Printer[Cat] = new CatPrinter
+//  val animalPrinter: Printer[Animal] = new AnimalPrinter
+//  printMyCat(catPrinter)
+//  printMyCat(animalPrinter)
 
   object EMail {
     // injection (선택적)
@@ -194,4 +194,85 @@ object Main {
   println(rec.getWidth())
   println(rec.getHeight())
 
+//  abstract class Animal {
+//    def name: String
+//  }
+//  abstract class Pet extends Animal {}
+//  class Cat extends Pet {
+//    override def name: String = "Cat"
+//  }
+//  class Dog extends Pet {
+//    override def name: String = "Dog"
+//  }
+//  class Lion extends Animal {
+//    override def name: String = "Lion"
+//  }
+////  class Tiger extends Lion {
+////    override def name: String = "Tiger"
+////  }
+////  class PetContainer[+P](p:P) {
+////    def pet: P = p
+////  }
+//  class PetContainerBound[P<:Pet](p:P) {
+//    def pet: P = p
+//  }
+////  val dogContainer = new PetContainer[Dog](new Dog)
+////  val dogContainer2 = new PetContainer[Animal](new Dog)
+////  val catContainer = new PetContainer[Cat](new Cat)
+//  val catContainer2 = new PetContainerBound[Pet](new Cat)
+////  val lionContainer = new PetContainer[Lion](new Lion)
+////  val tigerContainer = new PetContainer[Tiger](new Lion)
+  class Food
+  abstract class Animal {
+    type SuitableFood <: Food
+    def eat(food: SuitableFood)
+  }
+  class Grass extends Food
+  class Cow extends Animal {
+    type SuitableFood = Grass
+    override def eat(food: SuitableFood){ }
+  }
+  class DogFood extends Food
+  class Dog extends Animal {
+    type SuitableFood = DogFood
+    override def eat(food: DogFood){ }
+  }
+  val bessy = new Cow
+  val mong  = new Dog
+  val mung = new Dog
+  mung eat (new mong.SuitableFood)
+
+  trait User{
+    def username: String
+  }
+  trait Tweeter {
+    this: User =>
+    def tweet(tweetText: String) = println(this.username+":"+tweetText)
+  }
+  class VerifiedTweeter(val username_ : String) extends Tweeter with User {
+    def username = s"real $username_"
+  }
+  val realName = new VerifiedTweeter("judy")
+  realName.tweet("hi")
+
+  def log(message: String, level: String = "INFO") = println(s"$level: $message")
+  log("System starting")
+
+  def printName(first: String, last: String, middle: String): Unit = {
+    println(first + " "+middle + " " + last)
+  }
+  printName(first="john","Smith",middle = "judy")
+
+  class Point(val x: Double = 0, val y: Double = 0)
+  val point1 = new Point(y = 1)
+  val point2 = new Point()
+  println(point1.x)
+  println(point1.y)
+  println(point2.x)
+  println(point2.y)
+  object DeprecationDemo extends App {
+    @deprecated("use newShinyMethod() instead")
+    def hello = "hola"
+    hello
+  }
 }
